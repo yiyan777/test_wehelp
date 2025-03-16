@@ -139,18 +139,21 @@ async def get_attractions(
         # print(attractions)
 
         for attraction in attractions:
-            cursor.execute("SELECT img_url FROM attraction_images WHERE attraction_id = %s", (attraction["id"],))
-            images = [img["img_url"] for img in cursor.fetchall()]
-            attraction["images"] = images
+            attraction["images"] = attraction["images"].split(",") if attraction["images"] else []
+            # print(attraction)
 
          # 計算符合篩選條件的所有資料總筆數 (不受分頁影響)
-        count_sql = "SELECT COUNT(*) FROM attractions"
+        count_sql = """
+            SELECT COUNT(DISTINCT attractions.id) 
+            FROM attractions
+            LEFT JOIN attraction_images ON attractions.id = attraction_images.attraction_id
+        """
         params = []  # 確保每次查詢時 params 都重新初始化
         if keyword:
-            count_sql += " WHERE name LIKE %s OR mrt = %s"
+            count_sql += " WHERE attractions.name LIKE %s OR attractions.mrt = %s"
             params = [f"%{keyword}%", keyword]
         cursor.execute(count_sql, params)  # 使用 count_sql 查詢總數
-        total_count = cursor.fetchone()["COUNT(*)"]
+        total_count = cursor.fetchone()["COUNT(DISTINCT attractions.id)"]
 
         next_page = page + 1 if offset + limit < total_count else None
 
@@ -195,6 +198,9 @@ async def get_attraction(
             GROUP BY attractions.id
         """, (attractionId,))
         attraction = cursor.fetchone()
+        if attraction:
+            attraction["images"] = attraction["images"].split(",") if attraction["images"] else []
+
 
         # 如果找不到該景點
         if not attraction:
