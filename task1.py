@@ -3,6 +3,7 @@ import mysql.connector
 from fastapi import FastAPI, Query, Path
 from fastapi.responses import JSONResponse
 from collections import Counter
+import traceback
 
 DB_HOST = "localhost"
 DB_USER = "root"
@@ -110,13 +111,27 @@ async def get_attractions(
         offset = page * limit
         params = []
 
-        sql = "SELECT id ,name, category, description, address, transport, mrt, lat, lng FROM attractions"
+        sql = """
+            SELECT 
+                attractions.id, 
+                attractions.name, 
+                attractions.category, 
+                attractions.description, 
+                attractions.address, 
+                attractions.transport, 
+                attractions.mrt, 
+                attractions.lat, 
+                attractions.lng,
+                GROUP_CONCAT(attraction_images.img_url) AS images
+            FROM attractions
+            LEFT JOIN attraction_images ON attractions.id = attraction_images.attraction_id
+        """
 
         if keyword:
-            sql += " WHERE name LIKE %s OR mrt = %s"
+            sql += " WHERE attractions.name LIKE %s OR attractions.mrt = %s"
             params.extend([f"%{keyword}%", keyword])
 
-        sql += " LIMIT %s OFFSET %s"
+        sql += " GROUP BY attractions.id LIMIT %s OFFSET %s"
         params.extend([limit, offset])
 
         cursor.execute(sql, params)
@@ -128,9 +143,15 @@ async def get_attractions(
             images = [img["img_url"] for img in cursor.fetchall()]
             attraction["images"] = images
 
-        # 計算是否有下一頁
-        cursor.execute("SELECT COUNT(*) FROM attractions")
+         # 計算符合篩選條件的所有資料總筆數 (不受分頁影響)
+        count_sql = "SELECT COUNT(*) FROM attractions"
+        params = []  # 確保每次查詢時 params 都重新初始化
+        if keyword:
+            count_sql += " WHERE name LIKE %s OR mrt = %s"
+            params = [f"%{keyword}%", keyword]
+        cursor.execute(count_sql, params)  # 使用 count_sql 查詢總數
         total_count = cursor.fetchone()["COUNT(*)"]
+
         next_page = page + 1 if offset + limit < total_count else None
 
         cursor.close()
@@ -155,11 +176,23 @@ async def get_attraction(
         con = get_db_connection()
         cursor = con.cursor(dictionary=True)
         
-        # 查詢景點基本資料
+        # 查詢單一景點資料及其圖片
         cursor.execute("""
-            SELECT id, name, category, description, address, transport, mrt, lat, lng 
-            FROM attractions 
-            WHERE id = %s
+            SELECT 
+                attractions.id, 
+                attractions.name, 
+                attractions.category, 
+                attractions.description, 
+                attractions.address, 
+                attractions.transport, 
+                attractions.mrt, 
+                attractions.lat, 
+                attractions.lng,
+                GROUP_CONCAT(attraction_images.img_url) AS images
+            FROM attractions
+            LEFT JOIN attraction_images ON attractions.id = attraction_images.attraction_id
+            WHERE attractions.id = %s
+            GROUP BY attractions.id
         """, (attractionId,))
         attraction = cursor.fetchone()
 
@@ -171,13 +204,6 @@ async def get_attraction(
                 content={"error": True, "message": "景點編號不正確"},
                 status_code=400
             )
-        
-        # 查詢該景點的圖片
-        cursor.execute("""
-            SELECT img_url FROM attraction_images WHERE attraction_id = %s
-        """, (attractionId,))
-        images = [img["img_url"] for img in cursor.fetchall()]
-        attraction["images"] = images
 
         cursor.close()
         con.close()
@@ -208,7 +234,7 @@ async def get_mrts():
         mrt_counts = Counter(mrt_list)  # 計算 MRT 出現次數，並依照次數排序
 
         # mrt_counts.most_common()會形成列表，且由大到小 EX:[(新北投, 6), (劍潭, 4) ... ]
-        sorted_mrts = [mrt for mrt, _ in mrt_counts.most_common()] 
+        sorted_mrts = [mrt for mrt, _ in mrt_counts.most_common()] if mrt_list else []
 
         return {
             "data": sorted_mrts
