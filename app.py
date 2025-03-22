@@ -7,8 +7,10 @@ from fastapi.responses import JSONResponse
 from collections import Counter
 import traceback
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app=FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
@@ -105,7 +107,6 @@ if False:
     con.close()
     print("所有景點資料與圖片網址已成功存入 taipei_attractions 資料庫")
 
-app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -278,3 +279,4 @@ async def get_mrts():
             content={"error": True, "message": "伺服器內部錯誤，請稍後再試"},
             status_code=500
         )
+    
