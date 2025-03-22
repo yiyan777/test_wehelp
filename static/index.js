@@ -3,7 +3,7 @@ let nextPage = 1;
 let isLoading = false;
 
 async function getMrtList() {
-    let response = await fetch("http://127.0.0.1:8000/api/mrts");
+    let response = await fetch("http://18.177.65.105:8000/api/mrts");
     let result = await response.json();
     // console.log(result.data);
     let mrtList = document.querySelector(".mrts")
@@ -22,7 +22,7 @@ async function getData(page, keyword = "") {
     if (isLoading || page === null) return; // 避免重複請求
     isLoading = true;
     try {
-        let url = `http://127.0.0.1:8000/api/attractions?page=${page}`;
+        let url = `http://18.177.65.105:8000/api/attractions?page=${page}`;
         if (keyword){
             url += `&keyword=${encodeURIComponent(keyword)}`;
         }
