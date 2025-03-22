@@ -1,0 +1,240 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow-x: hidden;
+}
+
+nav{
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    position: fixed;
+    z-index: 1000;
+    width: 100%; height: 54px;
+}
+.nav-title{
+    display: flex; 
+    max-width: 1200px;
+    width: 1200px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+.func-for-user{
+    display: flex;
+    gap: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+}
+.taipei-1day{
+    margin-left: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #448899;
+}
+.hero-section{
+    width: 100%; 
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    position: relative;
+    height: 320px;
+    background-image: url("./imgs/taipei-101.png");
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+}
+h2{
+    color: white;
+    font-size: 28px;
+}
+
+.slogan{
+    position: absolute;
+    width: 1200px;
+    max-width: 90%; height: 149px;
+    margin-left: 10px;
+    top: 75px;
+}
+.slogan-text{
+    font-size: 16px; max-width: 100%;
+    color: white; font-weight: bold;
+    margin-bottom: 30px;
+}
+.search-btn{
+    border: none;
+    background: none;
+    padding: 0;
+}
+.search-btn img{
+    width: 50px; height: 100%;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.slogan-search-form{
+    display: flex; height: 46px; 
+    justify-content: start;
+}
+.slogan-search-form input{
+    border: none; height: 44px; max-width: 100%; width: 400px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-size: 16px; font-weight: bold;
+    padding-left: 10px;
+}
+.slogan-search-form input::placeholder{
+    font-weight: bold;
+    font-size: 16px;
+    color: #757575;
+}
+main{
+    justify-content: center;
+}
+.mrtListCotainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1200px; max-width: 100%;
+    margin: auto; margin-top: 40px; 
+}
+
+.mrts{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    color: #757575;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; 
+    width: 1200px;
+}
+.each-mrt{
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.left-arrow{
+    margin-right: 10px;
+    cursor: pointer;
+}
+.right-arrow{
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.attractions{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
+    margin: auto; margin-top: 35px;
+    width: 1200px; max-width: 100%;
+    gap: 30px;
+}
+/* .attraction-frame.a1{grid-area: a1;}
+.attraction-frame.a2{grid-area: a2;}
+.attraction-frame.a3{grid-area: a3;}
+.attraction-frame.a4{grid-area: a4;}
+.attraction-frame.a5{grid-area: a5;}
+.attraction-frame.a6{grid-area: a6;}
+.attraction-frame.a7{grid-area: a7;}
+.attraction-frame.a8{grid-area: a8;}
+.attraction-frame.a9{grid-area: a9;}
+.attraction-frame.a10{grid-area: a10;}
+.attraction-frame.a11{grid-area: a11;}
+.attraction-frame.a12{grid-area: a12;} */
+
+.attraction-frame{
+    border: 1px solid #E8E8E8;
+    position: relative;
+    width: 100%; height: 100%;
+    border-radius: 10px;
+    /* 確保所有卡片高度一致 */ 
+    overflow: hidden; /* 防止內容超出 */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: start; */
+
+}
+.attraction-name{
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 10px);  /*確保不超出邊界*/
+    height: 40px;
+    background-color: rgba(0,0,0,0.6);
+    padding-left: 10px;
+    color: white;
+    align-items: center;
+    line-height: 40px;
+    font-weight: bold;
+    white-space: nowrap;  /* 防止換行 */
+    overflow: hidden;     /* 隱藏超出容器的文本 */
+    text-overflow: ellipsis;  /* 超過部分顯示省略號 */
+}
+
+.attraction-box{
+    height: 200px; 
+    width: 100%;
+    position: relative;
+    background-image: url("./imgs/sample.png");            
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;   
+}
+
+.mrt-and-category{
+    border-top: none;
+    /* 確保不超出邊界  */
+    width: calc(100% - 20px); 
+    height: 40px; line-height: 40px;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.mrt{
+    color: #757575;
+    font-weight: bold;
+}
+.category{
+    color: #757575;
+    font-weight: bold;
+}
+footer{
+    height: 104px;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    background-color: #757575; color: white;
+    font-size: 16px; font-weight: bold;
+    margin-top: 40px;
+}
+
+@media (max-width:1200px){
+    .attractions{
+        width: 90%;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .mrtListCotainer{
+        width: 90%;
+    }
+}
+
+@media (max-width:600px){
+    .attractions{
+        width: 90%;
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .mrtListCotainer{
+        width: 90%;
+    }
+    .slogan-search-form input{
+        width: 60%;
+    }
+}

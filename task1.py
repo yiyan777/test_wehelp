@@ -4,6 +4,7 @@ from fastapi import FastAPI, Query, Path
 from fastapi.responses import JSONResponse
 from collections import Counter
 import traceback
+from fastapi.middleware.cors import CORSMiddleware
 
 DB_HOST = "localhost"
 DB_USER = "root"
@@ -86,6 +87,14 @@ if False:
     print("所有景點資料與圖片網址已成功存入 taipei_attractions 資料庫")
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 允許所有來源 (測試用，正式環境應該改成特定 domain)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # MySQL 連線設定
 DB_CONFIG = {
