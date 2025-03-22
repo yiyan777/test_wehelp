@@ -1,11 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Index</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台北一日遊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-  
+    <nav>
+        <div class="nav-title">
+            <div class="taipei-1day">台北一日遊</div>
+            <div class="func-for-user">
+                <div>預定行程</div>
+                <div>登入/註冊</div>
+            </div>
+        </div>
+    </nav>
+    <div class="hero-section">
+        <div class="slogan">
+            <h2>輕鬆享受台北一日悠閒</h2>
+            <div class="slogan-text">探索每個角落，體驗城市的深度旅遊行程</div>
+            <form action="" class="slogan-search-form">
+                <input type="text" placeholder="輸入景點名稱查詢">
+                <button type="submit" class="search-btn">
+                    <img src="./imgs/icon-search.png" alt="搜尋">
+                </button>
+            </form>
+        </div>
+    </div>
+    <main>
+        <div class="mrtListCotainer">
+            <img class="left-arrow" src="./imgs/left-arrow.png" width="30" height="30">
+            <div class="mrts"></div>
+            <img class="right-arrow" src="./imgs/right-arrow.png" width="30" height="30">
+        </div>
+        
+        <div class="attractions" id="attraction-container">
+            <!-- <div class="attraction-frame"> 
+                <div class="attraction-box">
+                    <div class="attraction-name">平安鐘</div>
+                </div>
+                <div class="mrt-and-category">
+                    <div class="mrt">忠孝復興</div>
+                    <div class="category">文藝</div>
+                </div>
+            </div>  -->
+        </div>
+    </main>
+    <footer>
+        <div>COPYRIGHT © 2021 台北一日遊</div>
+    </footer>
+    <script src="./index.js"></script>
 </body>
 </html>
