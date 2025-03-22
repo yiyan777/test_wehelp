@@ -173,6 +173,9 @@ main{
     align-items: center;
     line-height: 40px;
     font-weight: bold;
+    white-space: nowrap;  /* 防止換行 */
+    overflow: hidden;     /* 隱藏超出容器的文本 */
+    text-overflow: ellipsis;  /* 超過部分顯示省略號 */
 }
 
 .attraction-box{
