@@ -85,6 +85,8 @@ h2{
     border: none; height: 100%; max-width: 100%; width: 400px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     font-size: 16px;
     font-weight: bold; 
     padding-left: 10px;
