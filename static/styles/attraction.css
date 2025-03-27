@@ -1,0 +1,331 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow-x: hidden;
+}
+
+nav{
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    position: fixed;
+    z-index: 1000;
+    width: 100%; height: 54px;
+}
+nav a {
+    text-decoration: none; /* 取消台北一日遊的連結底線 */
+}  
+
+.nav-title{
+    display: flex; 
+    max-width: 1200px;
+    width: 1200px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+.func-for-user{
+    display: flex;
+    gap: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+}
+.taipei-1day{
+    margin-left: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #448899;
+}
+footer{
+    height: 104px;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    background-color: #757575; color: white;
+    font-size: 16px; font-weight: bold;
+    margin-top: 40px;
+}
+main{
+    /* border: 1px solid black; */
+    width: 1200px; max-width: 100%;
+    margin: auto; margin-top: 84px;
+}
+.attraction-container{
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+.desc-box{
+    display: flex; flex-direction: column;
+    justify-content: space-evenly;
+    /* border: 1px solid red; */
+    max-width: 100%;
+    height: 100%; width: 100%;
+    margin: auto;
+}
+.attraction-intro{
+    /* border: 1px solid blue; */
+    max-width: 100%;
+    margin: auto;
+    margin-top: 30px;
+    color: #666;
+}
+.attraction-intro>.title-address{
+    font-weight: bold;
+    margin-top: 20px;
+}
+.attraction-intro>.title-address>.address{
+    font-weight: normal;
+}
+.attraction-intro>.title-transport{
+    font-weight: bold;
+    margin-top: 20px; margin-bottom: 40px;
+}
+.attraction-intro>.title-transport>.transport{
+    font-weight: normal;
+}
+
+.name{
+    font-size: 24px; font-weight: bold;
+    color: #666; max-width: 100%;
+}
+
+.category-mrt{
+    max-width: 100%;
+    color: #666;
+}
+.booking-section{
+    /* border: 1px solid blue; */
+    background-color: #e8e8e8;
+    max-width: 100%;
+    height: 320px;
+    border-radius: 5px;
+}
+.label-user-date{
+    margin-left: 15px;
+    color: #666;
+    font-weight: bold;
+}
+.inpute-user-date{
+    border: none;
+    height: 35px; width: 120px;
+}
+
+.user-time-container{
+    margin-left: 15px;
+    margin-top: 15px;
+    color: #666;
+}
+
+.label-user-time{
+    font-weight: bold;
+}
+/* .inpute-user-time{
+    accent-color: #448899;
+} */
+.inpute-user-time {
+    appearance: none;  /* 隱藏原生樣式 */
+    -webkit-appearance: none; /* Safari */
+    -moz-appearance: none; /* Firefox */
+    width: 20px; /* 設定圈圈大小 */
+    height: 20px;
+    border-radius: 50%; /* 讓它變成圓形 */
+    border: 1px solid #fff; /* 設定圈圈的邊框顏色 */
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+    background-color: #fff;
+    margin-top: 0; margin-left: 5px; margin-bottom: 4px; margin-right: 0;
+}
+/* 當 radio 被選中時，改變顏色 */
+.inpute-user-time:checked {
+    background-color: #448899;
+    border: 2px solid #fff;
+}
+
+.title-user-fee{
+    margin-left: 15px; 
+    margin-top: 15px;
+    color: #666;
+    font-weight: bold;
+}
+.user-fee{
+    display: inline-block;
+    font-weight: normal;
+}
+
+.title-booking{
+    color: #666; font-weight: bold;
+    margin-left: 15px;
+    margin-top: 15px;
+}
+.title-explore{
+    color: #666;
+    margin-left: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.booking-btn{
+    font-size: 19px; background-color: #448899; color: white;
+    margin-left: 15px;
+    margin-top: 20px;
+    width: auto; height: auto;
+    border: none;
+    padding-left: 15px; padding-right: 15px;
+    padding-top: 5px; padding-bottom: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+hr{
+    border: 1px #e8e8e8 solid;
+}
+
+.slideshow-container {
+    /* border: 1px solid black; */
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    height: 406px; /* 設定固定高度 */
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;  /*防止超出部分影響排版*/
+}
+
+.slideshow-container img {
+    /* border: 5px solid red; */
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1; /* 確保圖片在圓點下面 */
+}
+
+.image-wrapper{
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+}
+
+.image-wrapper img {
+    /* border: 1px solid green; */
+    max-width: 100%;
+    width: 100%; height: 100%;
+    border-radius: 10px;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 24px;
+    /* padding: 10px 15px; */
+    cursor: pointer;
+    max-width: 100%;
+}
+
+.arrow img{
+    width: 36px; height: 36px;/* 設定箭頭圖片大小 */
+    height: auto;
+    opacity: 0.7; /* 讓箭頭稍微透明 */
+    transition: opacity 0.2s ease-in-out;
+}
+.arrow img:hover{
+    opacity: 1; /* 滑鼠移過時變清晰 */
+}
+
+
+.left {
+    left: 10px;
+}
+
+.right {
+    right: 10px;
+}
+
+/* 修改圓點容器位置，確保圓點顯示在圖片內部的最下方 */
+.dots-container {
+    /* border: 5px solid yellow; */
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);  /* 圓點居中顯示 */
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    z-index: 2; /* 確保圓點在圖片之上 */
+    max-width: 100%;
+}
+
+.dot {
+    /* border: 3px solid blue; */
+    max-width: 100%;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #e8e8e8;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #000;
+    border: 1px solid #fff;
+}
+
+
+@media (max-width:1200px){
+    .attraction-container{
+        width: 90%;
+    }
+    .attraction-intro{
+        width: 90%;
+    }
+}
+
+@media (max-width:600px){
+    .attraction-container{
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .attraction-container{
+        width: 100%;
+    }
+    .attraction-container>.desc-box{
+        width: 90%;
+    }
+
+    .attraction-intro{
+        width: 90%;
+    }
+
+    .image-wrapper img{
+        border-radius: 0;
+    }
+
+    .left {
+        left: 5px;
+    }
+    
+    .right {
+        right: 5px;
+    }
+
+    main{
+        margin-top: 54px;
+    }
+}
