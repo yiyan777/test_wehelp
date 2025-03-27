@@ -289,12 +289,6 @@ hr{
 }
 
 
-
-
-
-
-
-
 @media (max-width:1200px){
     .attraction-container{
         width: 90%;
@@ -303,8 +297,6 @@ hr{
         width: 90%;
     }
 }
-
-
 
 @media (max-width:600px){
     .attraction-container{
@@ -319,5 +311,21 @@ hr{
 
     .attraction-intro{
         width: 90%;
+    }
+
+    .image-wrapper img{
+        border-radius: 0;
+    }
+
+    .left {
+        left: 5px;
+    }
+    
+    .right {
+        right: 5px;
+    }
+
+    main{
+        margin-top: 54px;
     }
 }
