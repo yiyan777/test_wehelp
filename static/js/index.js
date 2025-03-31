@@ -63,6 +63,11 @@ async function getData(page, keyword = "") {
             
             card.appendChild(imgBox);
             card.appendChild(mrtCategory);
+
+            // 加上點擊事件，點擊景點時導向 attraction.html
+            card.addEventListener("click", () =>{
+                window.location.href = `attraction/${item.id}`;
+            });
             
             container.appendChild(card);
         });
