@@ -8,6 +8,10 @@ from collections import Counter
 import traceback
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+import bcrypt
+import jwt
+from jwt import ExpiredSignatureError, InvalidTokenError
+import datetime
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -279,4 +283,116 @@ async def get_mrts():
             content={"error": True, "message": "伺服器內部錯誤，請稍後再試"},
             status_code=500
         )
-    
+
+
+@app.post("/api/user")
+async def register_user(request: Request):
+    try:
+        # 取得請求的 JSON 資料
+        data = await request.json()
+        name = data.get("name")
+        email = data.get("email")
+        password = data.get("password")
+
+        # 檢查必要欄位
+        if not name or not email or not password:
+            return JSONResponse(status_code=400, content={"error": True, "message": "缺少必要欄位"})
+
+        # 開始連接 MySQL
+        con = get_db_connection()
+        cursor = con.cursor(dictionary=True)
+
+        # 檢查 Email 是否已存在
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+        if cursor.fetchone():
+            cursor.close()
+            con.close()
+            return JSONResponse(status_code=400, content={"error": True, "message": "Email 已被註冊"})
+
+        # 加密密碼
+        hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        # 插入新使用者資料
+        cursor.execute("""
+            INSERT INTO users (name, email, password_hash)
+            VALUES (%s, %s, %s)
+        """, (name, email, hashed_password))
+        con.commit()
+
+        # 關閉資料庫連線
+        cursor.close()
+        con.close()
+
+        # 返回成功訊息，並明確設置為 JSON 格式
+        return JSONResponse(status_code=200, content={"ok": True})
+
+    except Exception as e:
+        # 如果有錯誤，返回伺服器錯誤訊息
+        return JSONResponse(status_code=500, content={"error": True, "message": "伺服器內部錯誤"})
+
+
+# User API：取得登入狀態（/api/user/auth）
+# 前端在請求此 API 時，須在 Authorization header 中帶入 Bearer Token
+
+# JWT 設定
+SECRET_KEY = "MY_SECRET_KEY" 
+ALGORITHM = "HS256"
+TOKEN_EXPIRE_HOURS = 2
+
+@app.get("/api/user/auth")
+async def get_user_auth(request: Request):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return {"data": None}
+    token = auth_header.split(" ")[1]
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        # 取得存放在 token 中的使用者資訊
+        user = {
+            "id": payload.get("id"),
+            "name": payload.get("name"),
+            "email": payload.get("email")
+        }
+        return {"data": user}
+    except (InvalidTokenError, ExpiredSignatureError):
+        return {"data": None}
+
+# 登入會員帳戶的API
+@app.put("/api/user/auth")
+async def login_user(request: Request):
+    try:
+        data = await request.json()
+        email = data.get("email")
+        password = data.get("password")
+
+        if not email or not password:
+            return JSONResponse(status_code=400, content={"error": True, "message": "請提供 Email 和密碼"})
+
+        con = get_db_connection()
+        cursor = con.cursor(dictionary=True)
+
+        # 查詢使用者
+        cursor.execute("SELECT id, name, email, password_hash FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+
+        cursor.close()
+        con.close()
+
+        # 若查無此帳號，或密碼錯誤
+        if not user or not bcrypt.checkpw(password.encode("utf-8"), user["password_hash"].encode("utf-8")):
+            return JSONResponse(status_code=400, content={"error": True, "message": "帳號或密碼錯誤"})
+
+        # 登入成功 → 產生 JWT Token（有效期 7 天）
+        payload = {
+            "id": user["id"],
+            "name": user["name"],
+            "email": user["email"],
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7)
+        }
+
+        token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+        return JSONResponse(status_code=200, content={"token": token})
+
+    except Exception:
+        return JSONResponse(status_code=500, content={"error": True, "message": "伺服器內部錯誤"})
