@@ -127,3 +127,197 @@ rightArrow.addEventListener("click", () => {
 // 初始加載第0頁數據
 getData(currentPage);
 getMrtList();
+
+// 開啟 popup（點右上角「登入/註冊」）
+const loginTrigger = document.getElementById("login-trigger");
+const popupOverlay = document.getElementById("user-pop");
+const closeBtn = document.querySelector(".popup-close");
+
+loginTrigger.addEventListener("click", () => {
+    popupOverlay.style.display = "flex";
+});
+
+// 關閉 popup（點 ×）
+closeBtn.addEventListener("click", () => {
+    popupOverlay.style.display = "none";
+});
+
+
+// 登入 <-> 註冊 表單切換
+const loginForm = document.querySelector(".popup-login");
+const signupForm = document.querySelector(".popup-signup");
+const showSignup = document.getElementById("show-signup");
+const showLogin = document.getElementById("show-login");
+
+// 點「點此註冊」→ 顯示註冊表單
+showSignup.addEventListener("click", () => {
+    loginForm.style.display = "none";
+    signupForm.style.display = "block";
+    document.getElementById("signup-msg").style.display = "none";
+});
+
+// 點「點此登入」→ 顯示登入表單
+showLogin.addEventListener("click", () => {
+    signupForm.style.display = "none";
+    loginForm.style.display = "block";
+    document.getElementById("login-msg").style.display = "none";
+});
+
+
+// 註冊功能：串接 POST /api/user
+
+const signupBtn = document.getElementById("signup-btn");
+const signupMsg = document.getElementById("signup-msg");
+
+signupBtn.addEventListener("click", async () => {
+    // 取得使用者輸入
+    const name = document.getElementById("signup-name").value.trim();
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
+
+    // 簡單檢查欄位
+    if (!name || !email || !password) {
+        signupMsg.textContent = "請填寫所有欄位";
+        signupMsg.style.color = "red";
+        signupMsg.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://18.177.65.105:8000/api/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            signupMsg.textContent = "註冊成功！請重新登入";
+            signupMsg.style.color = "green";
+            signupMsg.style.display = "block";
+
+            // 清空欄位
+            document.getElementById("signup-name").value = "";
+            document.getElementById("signup-email").value = "";
+            document.getElementById("signup-password").value = "";
+
+            // 過 2 秒切回登入表單
+            setTimeout(() => {
+                signupForm.style.display = "none";
+                loginForm.style.display = "block";
+                signupMsg.textContent = "";
+                signupMsg.style.display = "none";
+            }, 2000);
+        } else {
+            signupMsg.textContent = result.message || "註冊失敗";
+            signupMsg.style.color = "red";
+            signupMsg.style.display = "block";
+        }
+    } catch (error) {
+        signupMsg.textContent = "伺服器連線失敗";
+        signupMsg.style.color = "red";
+        signupMsg.style.display = "block";
+        console.error("Signup error:", error);
+    }
+});
+
+// 登入功能：串接 PUT /api/user/auth
+const loginBtn = document.getElementById("login-btn");
+const loginMsg = document.getElementById("login-msg");
+
+loginBtn.addEventListener("click", async () => {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    // 檢查欄位
+    if (!email || !password) {
+        loginMsg.textContent = "請輸入帳號和密碼";
+        loginMsg.style.color = "red";
+        loginMsg.style.display = "block";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // 成功登入，儲存 token
+            localStorage.setItem("token", result.token);
+
+            // 清空欄位 + 顯示訊息
+            document.getElementById("login-email").value = "";
+            document.getElementById("login-password").value = "";
+
+            loginMsg.textContent = "登入成功！重新整理畫面...";
+            loginMsg.style.color = "green";
+            loginMsg.style.display = "block";
+
+            // 過一秒重新整理頁面
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } else {
+            // 失敗：顯示錯誤訊息
+            loginMsg.textContent = result.message || "登入失敗";
+            loginMsg.style.color = "red";
+            loginMsg.style.display = "block";
+        }
+    } catch (error) {
+        loginMsg.textContent = "無法連線伺服器";
+        loginMsg.style.color = "red";
+        loginMsg.style.display = "block";
+        console.error("Login error:", error);
+    }
+});
+
+
+// 登入狀態判斷
+window.addEventListener("DOMContentLoaded", async () => {
+    const loginTrigger = document.getElementById("login-trigger");
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        // 沒 token → 顯示登入/註冊
+        loginTrigger.textContent = "登入 / 註冊";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.data) {
+            // 有登入 → 顯示登出系統
+            loginTrigger.textContent = "登出系統";
+
+            // 點擊登出時，移除 token 並刷新頁面
+            loginTrigger.addEventListener("click", () => {
+                localStorage.removeItem("token");
+                window.location.reload();
+            });
+        } else {
+            // Token 無效 → 顯示登入/註冊
+            loginTrigger.textContent = "登入 / 註冊";
+        }
+    } catch (error) {
+        console.error("登入狀態檢查失敗：", error);
+        loginTrigger.textContent = "登入 / 註冊";
+    }
+});
