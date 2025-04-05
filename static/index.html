@@ -15,7 +15,7 @@
             </a>
             <div class="func-for-user">
                 <div>預定行程</div>
-                <div>登入/註冊</div>
+                <div id="login-trigger">登入/註冊</div>
             </div>
         </div>
     </nav>
@@ -31,6 +31,33 @@
             </form>
         </div>
     </div>
+
+    <div id="user-pop" class="popup-overlay" style="display: none;">
+        <div class="popup-box">
+            <div class="decorator-bar"></div>
+            <div class="popup-close">&times;</div>
+            <!-- 讓使用者登入的表單 -->
+            <div class="popup-login" style="display: block;">
+                <h3>登入會員帳號</h3>
+                <input type="email" placeholder="輸入電子信箱" id="login-email"> <br>
+                <input type="password" placeholder="輸入密碼" id="login-password"> <br>
+                <button id="login-btn">登入帳戶</button>
+                <p class="popup-msg" id="login-msg" style="display: none;"></p>
+                <p class="switch-form">還沒有帳戶？<span id="show-signup">點此註冊</span></p>
+            </div>
+            <!-- 讓使用者註冊的表單 -->
+            <div class="popup-signup" style="display: none;">
+                <h3>註冊會員帳號</h3>
+                <input type="text" placeholder="輸入姓名" id="signup-name">
+                <input type="email" placeholder="輸入電子郵件" id="signup-email">
+                <input type="password" placeholder="輸入密碼" id="signup-password">
+                <button id="signup-btn">註冊新帳戶</button>
+                <p class="popup-msg" id="signup-msg" style="display: none;"></p>
+                <p class="switch-form">已經有帳戶了？<span id="show-login">點此登入</span></p>
+            </div>
+        </div>
+    </div>
+
     <main>
         <div class="mrtListCotainer">
             <img class="left-arrow" src="/static/imgs/left-arrow.png" width="30" height="30">
@@ -50,9 +77,11 @@
             </div>  -->
         </div>
     </main>
+
     <footer>
         <div>COPYRIGHT © 2025 台北一日遊</div>
     </footer>
+
     <script src="/static/js/index.js"></script>
 </body>
 </html>

@@ -35,6 +35,11 @@ nav a {
     font-weight: bold;
     color: #666;
 }
+
+#login-trigger{
+    cursor: pointer;
+}
+
 .taipei-1day{
     margin-left: 10px;
     font-size: 30px;
@@ -119,6 +124,14 @@ main{
 .inpute-user-date{
     border: none;
     height: 35px; width: 120px;
+
+    /* 修正 iOS Safari 隱形問題 */
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: white;
+    color: #666;
+    padding: 1px 5px;
+    font-size: 16px;
 }
 
 .user-time-container{
@@ -288,6 +301,121 @@ hr{
     border: 1px solid #fff;
 }
 
+.popup-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    max-width: 100%;
+}
+
+.popup-box {
+    background: #fff;
+    border-radius: 10px;
+    width: 340px; 
+    position: relative;
+    margin: auto;
+    margin-top: 80px;
+    max-width: 100%;
+}
+
+.popup-login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 310px;
+    height: 100%;
+    max-width: 100%;
+    margin: auto;
+}
+
+.decorator-bar{
+    width: 100%; height: 10px;
+    background-image: linear-gradient(to right, #66AABB, #337788);
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+h3{
+    color: #666; font-size: 24px;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px; right: 15px;
+    color: #666;
+    cursor: pointer;
+    font-size: 24px;
+    max-width: 100%;
+}
+
+.popup-box input {
+    height: 100%; font-size: 16px;
+    width: 310px; height: 47px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    max-width: 100%;
+}
+
+.popup-box input::placeholder{
+    font-weight: bold;
+    font-size: 16px;
+    color: #757575;
+}
+
+.popup-box button {
+    width: 100%;
+    padding: 0; margin: 0;
+    background-color: #448899; color: white;
+    height: 46px; font-size: 19px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+.popup-msg {
+    color: red;
+    font-size: 14px;
+    height: 18px;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+}
+
+.switch-form {
+    font-size: 16px; color: #666;
+    text-align: center; font-weight: normal;
+    margin-top: 10px;
+    padding-bottom: 5px;
+    max-width: 100%;
+}
+
+.switch-form span {
+    color: #666;
+    cursor: pointer;
+    max-width: 100%;
+}
+
+.popup-signup{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 310px;
+    max-width: 100%;
+    margin: auto;
+}
 
 @media (max-width:1200px){
     .attraction-container{
@@ -327,5 +455,17 @@ hr{
 
     main{
         margin-top: 54px;
+    }
+}
+
+@media (max-width:390px){
+    .popup-box{
+        width: 90%;
+    }
+    .popup-login{
+        width: 90%;
+    }
+    .popup-signup{
+        width: 90%;
     }
 }
