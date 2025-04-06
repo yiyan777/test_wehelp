@@ -132,13 +132,19 @@ getMrtList();
 const loginTrigger = document.getElementById("login-trigger");
 const popupOverlay = document.getElementById("user-pop");
 const closeBtn = document.querySelector(".popup-close");
+const popupBox = document.querySelector(".popup-box");  // 新增彈窗動畫
 
 loginTrigger.addEventListener("click", () => {
     popupOverlay.style.display = "flex";
+    // 新增登入/註冊彈窗動畫
+    setTimeout(() => {
+        popupBox.classList.add("active");
+    }, 10);
 });
 
 // 關閉 popup（點 ×）
 closeBtn.addEventListener("click", () => {
+    popupBox.classList.remove("active");
     popupOverlay.style.display = "none";
 });
 

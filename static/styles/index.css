@@ -241,6 +241,17 @@ footer{
     margin: auto;
     margin-top: 80px;
     max-width: 100%;
+    /* 以下新增登入/註冊彈窗動畫 */
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: all 0.5s ease;
+    pointer-events: none; /* 防止滑鼠誤點 */
+}
+
+.popup-box.active{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .popup-login{
