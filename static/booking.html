@@ -4,8 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles/booking.css">
 </head>
 <body>
-  
+  <nav>
+    <div class="nav-title">
+      <a href="/">
+        <div class="taipei-1day">台北一日遊</div>
+      </a>
+      <div class="func-for-user">
+          <div>預定行程</div>
+          <div id="login-trigger">登入/註冊</div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <h3 class="booking-title">您好，儼哥，待預訂的行程如下：</h3>
+    
+    <div class="booking-detail" id="booking-detail">
+      <!-- JS動態插入內容 -->
+       <div class="container-img-booking-outline">
+        <div class="attraction-img">
+        </div>
+        <div class="booking-outline">
+          <div class="taipei-1day-spot">台北一日遊：平安鐘</div>
+          <br>
+          <div class="date"><span>日期：</span>2025-04-30</div>
+          <div class="time"><span>時間：</span>早上9點到下午4點</div>
+          <div class="fee"><span>費用：</span>新台幣2000元</div>
+          <div class="location"><span>地點：</span>臺北市 大安區忠孝東路4段</div>
+        </div>
+      </div>
+      <div class="trash-can">
+        <img src="/static/imgs/icon-delete.png" alt="刪除預訂" width="30">
+      </div>
+    </div>
+
+    <div class="no-booking" id="no-booking" style="display: none;">
+      <p>目前沒有任何預約行程</p>
+    </div>
+  </main>
+
+  <footer>
+    <div>COPYRIGHT © 2025 台北一日遊</div>
+  </footer>
+  <script src="/static/js/booking.js"></script>
 </body>
 </html>

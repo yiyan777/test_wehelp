@@ -1,5 +1,3 @@
-console.log("哈哈");
-
 // 取得 URL 中的 id 參數
 const path = window.location.pathname;
 const attractionId = path.split('/')[2];  // 提取 URL 中的 ID
@@ -15,7 +13,7 @@ if (attractionId) {
 async function fetchAttractionData(id) {
   try {
     // 發送 GET 請求來取得景點詳細資料
-    const response = await fetch(`http://18.177.65.105:8000/api/attraction/${id}`);
+    const response = await fetch(`/api/attraction/${id}`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -183,7 +181,7 @@ signupBtn.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user", {
+        const response = await fetch("/api/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -240,7 +238,7 @@ loginBtn.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+        const response = await fetch("/api/user/auth", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -293,7 +291,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+        const response = await fetch("/api/user/auth", {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -320,3 +318,59 @@ window.addEventListener("DOMContentLoaded", async () => {
         loginTrigger.textContent = "登入 / 註冊";
     }
 });
+
+// 綁定預約按鈕
+const bookingBtn = document.querySelector(".booking-btn");
+bookingBtn.addEventListener("click", handleBooking);
+
+async function handleBooking(){
+  const token = localStorage.getItem("token");
+  if (!token) {
+    popupOverlay.style.display = "flex";
+    // 新增登入/註冊彈窗動畫
+    setTimeout(() => {
+      popupBox.classList.add("active");
+    }, 10);
+    return;
+  }
+  //抓取使用者輸入
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("morning").checked ? "morning" : "afternoon";
+  const price = time === "morning" ? 2000 : 2500;
+
+  if (!date){
+    alert("請選擇日期");
+    return;
+  }
+  //發送post請求
+  const attractionId = window.location.pathname.split("/")[2];
+  
+  try {
+    const response = await fetch("/api/booking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        attractionId: parseInt(attractionId),
+        date,
+        time,
+        price
+      })
+    });
+
+    const result = await response.json();
+
+    if (response.ok){
+      //預約成功，導向booking頁面
+      window.location.href = "/booking"; 
+    } else {
+      alert(result.message || "預約失敗");
+    }
+
+  }catch (error) {
+    console.error("預約錯誤", error);
+    alert("預約發生錯誤");
+  }
+}

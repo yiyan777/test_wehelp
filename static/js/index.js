@@ -3,7 +3,7 @@ let nextPage = 1;
 let isLoading = false;
 
 async function getMrtList() {
-    let response = await fetch("http://18.177.65.105:8000/api/mrts");
+    let response = await fetch("/api/mrts");
     let result = await response.json();
     // console.log(result.data);
     let mrtList = document.querySelector(".mrts")
@@ -22,7 +22,7 @@ async function getData(page, keyword = "") {
     if (isLoading || page === null) return; // 避免重複請求
     isLoading = true;
     try {
-        let url = `http://18.177.65.105:8000/api/attractions?page=${page}`;
+        let url = `/api/attractions?page=${page}`;
         if (keyword){
             url += `&keyword=${encodeURIComponent(keyword)}`;
         }
@@ -190,7 +190,7 @@ signupBtn.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user", {
+        const response = await fetch("/api/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -247,7 +247,7 @@ loginBtn.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+        const response = await fetch("/api/user/auth", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -300,7 +300,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+        const response = await fetch("/api/user/auth", {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
