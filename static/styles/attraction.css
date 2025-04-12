@@ -39,6 +39,9 @@ nav a {
 #login-trigger{
     cursor: pointer;
 }
+#booking{
+    cursor: pointer;
+}
 
 .taipei-1day{
     margin-left: 10px;
@@ -124,6 +127,7 @@ main{
 .inpute-user-date{
     border: none;
     height: 35px; width: 120px;
+    cursor: pointer;
 
     /* 修正 iOS Safari 隱形問題 */
     -webkit-appearance: none;

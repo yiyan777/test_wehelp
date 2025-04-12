@@ -374,3 +374,8 @@ async function handleBooking(){
     alert("預約發生錯誤");
   }
 }
+
+const showBooking = document.getElementById("booking");
+showBooking.addEventListener("click", () => {
+    window.location.href = "/booking";
+});

@@ -38,6 +38,10 @@ nav a {
     cursor: pointer;
 }
 
+#booking{
+    cursor: pointer;  
+}
+
 .taipei-1day{
     margin-left: 10px;
     font-size: 30px;

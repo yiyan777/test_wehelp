@@ -327,3 +327,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         loginTrigger.textContent = "登入 / 註冊";
     }
 });
+
+const showBooking = document.getElementById("booking");
+showBooking.addEventListener("click", () => {
+    window.location.href = "/booking";
+});

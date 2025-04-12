@@ -6,6 +6,10 @@ html, body {
     overflow-x: hidden;
 }
 
+hr{
+    border: 1px solid #e8e8e8;
+}
+
 nav{
     border-bottom: 1px solid #e8e8e8;
     display: flex;
@@ -40,6 +44,10 @@ nav a {
     cursor: pointer;
 }
 
+#booking{
+    cursor: pointer;
+}
+
 .taipei-1day{
     margin-left: 10px;
     font-size: 30px;
@@ -69,6 +77,7 @@ footer{
     width: 980px; max-width: 100%;
     justify-content: space-between;
     margin: auto;
+    margin-bottom: 40px;
 }
 .container-img-booking-outline{
     display: flex;
@@ -85,7 +94,12 @@ footer{
 .trash-can{
     cursor: pointer;
     margin-right: 10px;
+    width: 30px; height: 30px;
 }
+.trash-can img{
+    width: 100%; height: 100%;
+}
+
 .taipei-1day-spot{
     font-weight: bold;
     color: #448899;
@@ -104,6 +118,61 @@ footer{
 }
 span{
     font-weight: bold;
+}
+
+.user-info{
+    margin-bottom: 40px;
+}
+
+.user-info input{
+    font-size: 18px;
+    border: 1px solid #e8e8e8;
+    height: 28px; width: 200px;
+    padding-left: 10px;
+}
+#user-name{
+    margin-bottom: 20px;
+}
+#user-email{
+    margin-bottom: 20px;
+}
+
+.user-payment-info input{
+    font-size: 18px;
+    border: 1px solid #e8e8e8;
+    height: 28px; width: 200px;
+    padding-left: 10px;
+}
+
+#user-credit-card{
+    margin-bottom: 20px;
+}
+#user-credit-card-exp{
+    margin-bottom: 20px;
+}
+#user-credit-card-security{
+    margin-bottom: 20px;
+}
+
+.show-fee-confirm{
+    display: flex; flex-direction: column;
+    align-items: end;
+    height: 100px; max-width: 100%;
+    margin-top: 30px;
+}
+.show-confirm{
+    border: 1px solid blue;
+    text-align: center;
+    width: 174px;
+    height: 36px; line-height: 36px;
+    font-size: 19px; 
+    color: #fff; background-color: #448899;
+    border-radius: 5px; 
+    margin-top: 20px;
+    cursor: pointer;
+}
+.no-booking{
+    height: 474px;
 }
 
 @media (max-width:1200px) {
@@ -126,9 +195,11 @@ span{
         margin-top: 30px;
     }
     .trash-can{
-        position: absolute;
-        right: 0px;
-        bottom: 0px;
+        margin-left: auto;
+    }
+    .trash-can img{
+        height: 100%;
+        width: 100%;
     }
     .attraction-img{
         width: 100%;

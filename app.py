@@ -516,3 +516,43 @@ async def create_booking(request: Request):
             status_code=500,
             content={"error": True, "message": "伺服器錯誤"}
         )
+
+@app.delete("/api/booking")
+async def delete_booking(request: Request):
+    # 從 headers 取得 JWT Token
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    token = auth_header.split(" ")[1]
+
+    try:
+        # 解碼 token
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("id")
+    except (ExpiredSignatureError, InvalidTokenError):
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "無效的登入資訊"}
+        )
+
+    try:
+        # 連線並刪除資料
+        con = get_db_connection()
+        cursor = con.cursor()
+        cursor.execute("DELETE FROM bookings WHERE user_id = %s", (user_id,))
+        con.commit()
+        cursor.close()
+        con.close()
+
+        return JSONResponse(status_code=200, content={"ok": True})
+
+    except Exception as e:
+        print("刪除預約時發生錯誤：", e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器錯誤"}
+        )
