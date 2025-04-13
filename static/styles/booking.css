@@ -85,7 +85,7 @@ footer{
 }
 .attraction-img{
     width: 250px;
-    background-image: url("/static/imgs/sample.png");
+    /* background-image: url("/static/imgs/sample.png"); */
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;
