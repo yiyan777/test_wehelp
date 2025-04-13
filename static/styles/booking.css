@@ -161,7 +161,7 @@ span{
     margin-top: 30px;
 }
 .show-confirm{
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     text-align: center;
     width: 174px;
     height: 36px; line-height: 36px;

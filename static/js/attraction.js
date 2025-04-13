@@ -375,7 +375,45 @@ async function handleBooking(){
   }
 }
 
-const showBooking = document.getElementById("booking");
-showBooking.addEventListener("click", () => {
-    window.location.href = "/booking";
+const bookingTrigger = document.getElementById("booking");
+
+bookingTrigger.addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        // 沒 token 直接跳 popup
+        popupOverlay.style.display = "flex";
+        setTimeout(() => {
+            popupBox.classList.add("active");
+        }, 10);
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/user/auth", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.data) {
+            // token 有效 → 導向 booking 頁面
+            window.location.href = "/booking";
+        } else {
+            // token 無效 → 顯示登入 popup
+            popupOverlay.style.display = "flex";
+            setTimeout(() => {
+                popupBox.classList.add("active");
+            }, 10);
+        }
+    } catch (error) {
+        console.error("驗證登入狀態失敗", error);
+        popupOverlay.style.display = "flex";
+        setTimeout(() => {
+            popupBox.classList.add("active");
+        }, 10);
+    }
 });
