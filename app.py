@@ -12,6 +12,7 @@ import bcrypt
 import jwt
 from jwt import ExpiredSignatureError, InvalidTokenError
 import datetime
+from datetime import datetime, timezone, timedelta
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -387,7 +388,7 @@ async def login_user(request: Request):
             "id": user["id"],
             "name": user["name"],
             "email": user["email"],
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7)
+            "exp": datetime.now(timezone.utc) + timedelta(days=7)
         }
 
         token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
@@ -396,3 +397,162 @@ async def login_user(request: Request):
 
     except Exception:
         return JSONResponse(status_code=500, content={"error": True, "message": "伺服器內部錯誤"})
+
+@app.get("/api/booking")
+async def get_booking(request: Request):
+    # 從 headers 抓取 JWT Token
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return JSONResponse(status_code=403, content={"error": True, "message": "未登入系統，拒絕存取"})
+    
+    token = auth_header.split(" ")[1]
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("id")
+    except (ExpiredSignatureError, InvalidTokenError):
+        return JSONResponse(status_code=403, content={"error": True, "message": "無效的登入資訊"})
+    
+    try:
+        con = get_db_connection()
+        cursor = con.cursor(dictionary=True)
+
+        # 查詢該會員的最新一筆預約資料
+        cursor.execute("""
+            SELECT
+                b.attraction_id, b.date, b.time, b.price,
+                a.name, a.address,
+                (SELECT img_url FROM attraction_images 
+                WHERE attraction_id = b.attraction_id 
+                LIMIT 1) AS image
+            FROM bookings b
+            JOIN attractions a ON b.attraction_id = a.id
+            WHERE b.user_id = %s
+            ORDER BY b.created_at DESC
+            LIMIT 1
+        """, (user_id,))
+        booking = cursor.fetchone()
+
+        cursor.close()
+        con.close()
+
+        if not booking:
+            return {"data": None}
+        
+        return {
+            "data": {
+                "attraction": {
+                    "id": booking["attraction_id"],
+                    "name": booking["name"],
+                    "address": booking["address"],
+                    "image": booking["image"]
+                },
+                "date": booking["date"].isoformat(),  # 轉成字串
+                "time": booking["time"],
+                "price": booking["price"]
+            }
+        }
+    
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500, 
+            content={"error": True, "message": "伺服器錯誤"}
+        )
+
+@app.post("/api/booking")
+async def create_booking(request: Request):
+    # 從headers中取得JWT Token
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+    token = auth_header.split(" ")[1]
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("id")
+    except (ExpiredSignatureError, InvalidTokenError):
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "無效的登入資訊"}
+        )
+    try:
+        data = await request.json()
+        attraction_id = data.get("attractionId")
+        date = data.get("date")
+        time = data.get("time")
+        price = data.get("price")
+
+        if not attraction_id or not date or not time or not price:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "缺少必要的預約資訊"}
+            )
+        con = get_db_connection()
+        cursor = con.cursor()
+
+        # 刪除舊的預約資料(每個會員只保留一筆預約)
+        cursor.execute("DELETE FROM bookings WHERE user_id = %s", (user_id,))
+
+        # 插入新資料
+        cursor.execute("""
+            INSERT INTO bookings (user_id, attraction_id, date, time, price)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (user_id, attraction_id, date, time, price))
+        con.commit()
+
+        cursor.close()
+        con.close()
+
+        return JSONResponse(
+            status_code=200,
+            content={"ok": True}
+        )
+    except Exception as e:
+        print(e)
+        return  JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器錯誤"}
+        )
+
+@app.delete("/api/booking")
+async def delete_booking(request: Request):
+    # 從 headers 取得 JWT Token
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    token = auth_header.split(" ")[1]
+
+    try:
+        # 解碼 token
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("id")
+    except (ExpiredSignatureError, InvalidTokenError):
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "無效的登入資訊"}
+        )
+
+    try:
+        # 連線並刪除資料
+        con = get_db_connection()
+        cursor = con.cursor()
+        cursor.execute("DELETE FROM bookings WHERE user_id = %s", (user_id,))
+        con.commit()
+        cursor.close()
+        con.close()
+
+        return JSONResponse(status_code=200, content={"ok": True})
+
+    except Exception as e:
+        print("刪除預約時發生錯誤：", e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器錯誤"}
+        )

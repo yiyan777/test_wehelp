@@ -3,7 +3,7 @@ let nextPage = 1;
 let isLoading = false;
 
 async function getMrtList() {
-    let response = await fetch("http://18.177.65.105:8000/api/mrts");
+    let response = await fetch("/api/mrts");
     let result = await response.json();
     // console.log(result.data);
     let mrtList = document.querySelector(".mrts")
@@ -22,7 +22,7 @@ async function getData(page, keyword = "") {
     if (isLoading || page === null) return; // 避免重複請求
     isLoading = true;
     try {
-        let url = `http://18.177.65.105:8000/api/attractions?page=${page}`;
+        let url = `/api/attractions?page=${page}`;
         if (keyword){
             url += `&keyword=${encodeURIComponent(keyword)}`;
         }
@@ -132,13 +132,19 @@ getMrtList();
 const loginTrigger = document.getElementById("login-trigger");
 const popupOverlay = document.getElementById("user-pop");
 const closeBtn = document.querySelector(".popup-close");
+const popupBox = document.querySelector(".popup-box");  // 新增彈窗動畫
 
 loginTrigger.addEventListener("click", () => {
     popupOverlay.style.display = "flex";
+    // 新增登入/註冊彈窗動畫
+    setTimeout(() => {
+        popupBox.classList.add("active");
+    }, 10);
 });
 
 // 關閉 popup（點 ×）
 closeBtn.addEventListener("click", () => {
+    popupBox.classList.remove("active");
     popupOverlay.style.display = "none";
 });
 
@@ -184,7 +190,7 @@ signupBtn.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user", {
+        const response = await fetch("/api/user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -241,7 +247,7 @@ loginBtn.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+        const response = await fetch("/api/user/auth", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -294,7 +300,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://18.177.65.105:8000/api/user/auth", {
+        const response = await fetch("/api/user/auth", {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -319,5 +325,48 @@ window.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
         console.error("登入狀態檢查失敗：", error);
         loginTrigger.textContent = "登入 / 註冊";
+    }
+});
+
+const bookingTrigger = document.getElementById("booking");
+
+bookingTrigger.addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        // 沒 token 直接跳 popup
+        popupOverlay.style.display = "flex";
+        setTimeout(() => {
+            popupBox.classList.add("active");
+        }, 10);
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/user/auth", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.data) {
+            // token 有效 → 導向 booking 頁面
+            window.location.href = "/booking";
+        } else {
+            // token 無效 → 顯示登入 popup
+            popupOverlay.style.display = "flex";
+            setTimeout(() => {
+                popupBox.classList.add("active");
+            }, 10);
+        }
+    } catch (error) {
+        console.error("驗證登入狀態失敗", error);
+        popupOverlay.style.display = "flex";
+        setTimeout(() => {
+            popupBox.classList.add("active");
+        }, 10);
     }
 });

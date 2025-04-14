@@ -1,0 +1,208 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow-x: hidden;
+}
+
+hr{
+    border: 1px solid #e8e8e8;
+}
+
+nav{
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    position: fixed;
+    z-index: 1000;
+    width: 100%; height: 54px;
+}
+nav a {
+    text-decoration: none; /* 取消台北一日遊的連結底線 */
+}  
+
+.nav-title{
+    display: flex; 
+    max-width: 1200px;
+    width: 1200px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+.func-for-user{
+    display: flex;
+    gap: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+}
+
+#login-trigger{
+    cursor: pointer;
+}
+
+#booking{
+    cursor: pointer;
+}
+
+.taipei-1day{
+    margin-left: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #448899;
+}
+
+main{
+    /* border: 1px black solid; */
+    width: 1000px; max-width: 100%;
+    margin: auto; margin-top: 84px;
+    color: #666;
+}
+footer{
+    height: 104px;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    background-color: #757575; color: white;
+    font-size: 16px; font-weight: bold;
+    margin-top: 40px;
+}
+.booking-detail{
+    /* border: 1px blue solid;  */
+    display: flex;
+    position: relative;
+    width: 980px; max-width: 100%;
+    justify-content: space-between;
+    margin: auto;
+    margin-bottom: 40px;
+}
+.container-img-booking-outline{
+    display: flex;
+    gap: 20px;
+}
+.attraction-img{
+    width: 250px;
+    /* background-image: url("/static/imgs/sample.png"); */
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+}
+
+.trash-can{
+    cursor: pointer;
+    margin-right: 10px;
+    width: 30px; height: 30px;
+}
+.trash-can img{
+    width: 100%; height: 100%;
+}
+
+.taipei-1day-spot{
+    font-weight: bold;
+    color: #448899;
+}
+.date{
+    margin-bottom: 10px;
+}
+.time{
+    margin-bottom: 10px;
+}
+.fee{
+    margin-bottom: 10px;
+}
+.location{
+    margin-bottom: 10px;
+}
+span{
+    font-weight: bold;
+}
+
+.user-info{
+    margin-bottom: 40px;
+}
+
+.user-info input{
+    font-size: 18px;
+    border: 1px solid #e8e8e8;
+    height: 28px; width: 200px;
+    padding-left: 10px;
+}
+#user-name{
+    margin-bottom: 20px;
+}
+#user-email{
+    margin-bottom: 20px;
+}
+
+.user-payment-info input{
+    font-size: 18px;
+    border: 1px solid #e8e8e8;
+    height: 28px; width: 200px;
+    padding-left: 10px;
+}
+
+#user-credit-card{
+    margin-bottom: 20px;
+}
+#user-credit-card-exp{
+    margin-bottom: 20px;
+}
+#user-credit-card-security{
+    margin-bottom: 20px;
+}
+
+.show-fee-confirm{
+    display: flex; flex-direction: column;
+    align-items: end;
+    height: 100px; max-width: 100%;
+    margin-top: 30px;
+}
+.show-confirm{
+    /* border: 1px solid blue; */
+    text-align: center;
+    width: 174px;
+    height: 36px; line-height: 36px;
+    font-size: 19px; 
+    color: #fff; background-color: #448899;
+    border-radius: 5px; 
+    margin-top: 20px;
+    cursor: pointer;
+}
+.no-booking{
+    height: 474px;
+}
+
+@media (max-width:1200px) {
+    main{
+        width: 90%;
+    }
+}
+
+@media (max-width:600px){
+    main{
+        width: 90%;
+    }
+    .container-img-booking-outline{
+        display: block;
+    }
+    .booking-detail{
+        display: block;
+    }
+    .booking-outline{
+        margin-top: 30px;
+    }
+    .trash-can{
+        margin-left: auto;
+    }
+    .trash-can img{
+        height: 100%;
+        width: 100%;
+    }
+    .attraction-img{
+        width: 100%;
+        height: 200px;
+    }
+}

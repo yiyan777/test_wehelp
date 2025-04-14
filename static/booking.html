@@ -4,8 +4,91 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles/booking.css">
 </head>
 <body>
-  
+  <nav>
+    <div class="nav-title">
+      <a href="/">
+        <div class="taipei-1day">台北一日遊</div>
+      </a>
+      <div class="func-for-user">
+          <div class="booking" id="booking">預定行程</div>
+          <div id="login-trigger">登出系統</div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <h3 class="booking-title">您好，儼哥，待預訂的行程如下：</h3>
+    <div class="all-info">
+      <div class="booking-detail" id="booking-detail">
+        <!-- JS動態插入內容 -->
+        <div class="container-img-booking-outline">
+          <div class="attraction-img"> </div>
+          <div class="booking-outline">
+            <div class="taipei-1day-spot">台北一日遊：平安鐘</div>
+            <br>
+            <div class="date"><span>日期：</span>2025-04-30</div>
+            <div class="time"><span>時間：</span>早上9點到下午4點</div>
+            <div class="fee"><span>費用：</span>新台幣2000元</div>
+            <div class="location"><span>地點：</span>臺北市 大安區忠孝東路4段</div>
+          </div>
+        </div>
+        <div class="trash-can" id="trash-can">
+          <img src="/static/imgs/icon-delete.png" alt="刪除預訂">
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="user-info">
+        <h3>您的聯絡資訊</h3>
+        <label for="user-name">聯絡姓名：</label>
+        <input type="text" id="user-name">
+        <br>
+        <label for="user-email">聯絡信箱：</label>
+        <input type="text" id="user-email">
+        <br>
+        <label for="user-phone">手機號碼：</label>
+        <input type="text" id="user-phone" required>
+        <br>
+        <h4>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</h4>
+      </div>
+
+      <hr>
+
+      <div class="user-payment-info">
+        <h3>信用卡付款資訊</h3>
+        <label for="user-credit-card">卡片號碼：</label>
+        <input type="text" id="user-credit-card" placeholder="**** **** **** ****" pattern="\d{16}" maxlength="16" required>
+        <br>
+        <label for="user-credit-card-exp">過期時間：</label>
+        <input type="text" id="user-credit-card-exp" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/\d{2}" maxlength="5" required>
+        <br>
+        <label for="user-credit-card-security">驗證密碼：</label>
+        <input type="text" id="user-credit-card-security" placeholder="CVV" maxlength="3" pattern="\d{3}" required>
+        <br>
+      </div>
+      
+      <hr>
+
+      <div class="show-fee-confirm">
+        <div class="show-fee">總價：新台幣2000元</div>
+        <div class="show-confirm" id="confirm-and-pay">確認訂購並付款</div>
+      </div>
+    </div>
+
+
+    <div class="no-booking" id="no-booking" style="display: none;">
+      <p>目前沒有任何預約行程</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>COPYRIGHT © 2025 台北一日遊</div>
+  </footer>
+  <script src="/static/js/booking.js"></script>
 </body>
 </html>

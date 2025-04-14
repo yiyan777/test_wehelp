@@ -39,6 +39,9 @@ nav a {
 #login-trigger{
     cursor: pointer;
 }
+#booking{
+    cursor: pointer;
+}
 
 .taipei-1day{
     margin-left: 10px;
@@ -124,6 +127,7 @@ main{
 .inpute-user-date{
     border: none;
     height: 35px; width: 120px;
+    cursor: pointer;
 
     /* 修正 iOS Safari 隱形問題 */
     -webkit-appearance: none;
@@ -322,6 +326,17 @@ hr{
     margin: auto;
     margin-top: 80px;
     max-width: 100%;
+    /* 以下新增登入/註冊彈窗動畫 */
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: all 0.5s ease;
+    pointer-events: none; /* 防止滑鼠誤點 */
+}
+
+.popup-box.active{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .popup-login{
