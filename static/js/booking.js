@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    // ✅ 檢查登入狀態，顯示登入 / 登出
+    // 檢查登入狀態，顯示登入 / 登出
     try {
         const res = await fetch("/api/user/auth", {
             method: "GET",
@@ -127,4 +127,144 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert("無法連線伺服器，請稍後再試");
         }
     });
+});
+
+
+window.addEventListener("load", function () {
+    // 等待 TapPay SDK 可用
+    if (typeof TPDirect === "undefined") {
+        console.error("TapPay SDK 尚未載入");
+        return;
+    }
+
+    // TapPay 初始化
+    TPDirect.setupSDK(
+        159825,
+        'app_5hClyHplrlWTOX1aBmLHvwzMBJJmryrKw1JYHC2d65WB6tHZm3GrpmQB6N2B',
+        'sandbox'
+    );
+
+    TPDirect.card.setup({
+        fields: {
+            number: {
+                element: '#card-number',
+                placeholder: '**** **** **** ****'
+            },
+            expirationDate: {
+                element: '#card-expiration-date',
+                placeholder: 'MM / YY'
+            },
+            ccv: {
+                element: '#card-ccv',
+                placeholder: 'CVV'
+            }
+        },
+        styles: {
+            'input': {
+                'color': 'gray',
+                'font-size': '16px'
+            },
+            '.valid': {
+                'color': 'green'
+            },
+            '.invalid': {
+                'color': 'red'
+            }
+        }
+    });
+    
+    console.log("TapPay SDK 初始化完成");
+});
+
+
+function getPrimeAsync() {
+    return new Promise((resolve, reject) => {
+        TPDirect.card.getPrime((result) => {
+            if (result.status !== 0) {
+                reject(result.msg);
+            } else {
+                resolve(result.card.prime);
+            }
+        });
+    });
+}
+
+console.log("點擊付款按鈕");
+const payMoneyBtn = document.getElementById("confirm-and-pay");
+payMoneyBtn.addEventListener("click", async () => {
+    const tappayStatus = TPDirect.card.getTappayFieldsStatus();
+    if (!tappayStatus.canGetPrime) {
+        alert("請填寫完整且正確的信用卡資訊！");
+        return;
+    }
+
+    try {
+        const prime = await getPrimeAsync();
+        console.log("取得 Prime 成功：", prime);
+
+        const contactName = document.getElementById("user-name").value;
+        const contactEmail = document.getElementById("user-email").value;
+        const contactPhone = document.getElementById("user-phone").value;
+
+        if (!contactName || !contactEmail || !contactPhone) {
+            alert("請填寫完整聯絡資訊！");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+        const bookingRes = await fetch("/api/booking", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const bookingResult = await bookingRes.json();
+        const booking = bookingResult.data;
+
+        if (!booking) {
+            alert("尚未預約行程！");
+            return;
+        }
+
+        const orderData = {
+            prime: prime,
+            order: {
+                price: booking.price,
+                trip: {
+                    attraction: booking.attraction,
+                    date: booking.date,
+                    time: booking.time
+                },
+                contact: {
+                    name: contactName,
+                    email: contactEmail,
+                    phone: contactPhone
+                }
+            }
+        };
+
+        const orderRes = await fetch("/api/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        const orderResult = await orderRes.json();
+        if (orderResult.data) {
+            const { number, payment } = orderResult.data;
+            if (payment.status === 0) {
+                window.location.href = `/thankyou?number=${number}`;
+            } else {
+                alert("付款失敗，請重新確認卡片資訊或聯絡客服");
+            }
+        } else {
+            alert("建立訂單失敗：" + (orderResult.message || "未知錯誤"));
+        }
+
+    } catch (error) {
+        console.error("送出訂單失敗：", error);
+        alert("發生錯誤，請稍後再試");
+    }
 });
