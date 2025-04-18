@@ -636,6 +636,7 @@ async def create_order(request: Request):
         # 根據付款結果更新訂單狀態
         if status == 0:
             cursor.execute("UPDATE orders SET status = 'PAID' WHERE order_number = %s", (order_number,))
+            cursor.execute("DELETE FROM bookings WHERE user_id = %s", (user_id,)) #付款後刪除原來的booking訂單(購物車)
             con.commit()
 
         cursor.close()
