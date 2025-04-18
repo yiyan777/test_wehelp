@@ -13,6 +13,11 @@ import jwt
 from jwt import ExpiredSignatureError, InvalidTokenError
 import datetime
 from datetime import datetime, timezone, timedelta
+import os
+from dotenv import load_dotenv
+load_dotenv() # 這行會去讀 .env 檔案
+
+PARTNER_KEY = os.getenv("PARTNER_KEY")
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -613,11 +618,11 @@ async def create_order(request: Request):
             "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",
             headers={
                 "Content-Type": "application/json",
-                "x-api-key": "partner_yqxLmBXWI59FWU44tusUMcv0FW5YPsFQw3dRaTVvGmkT9FWmBSNFuXwP"  # Partner Key
+                "x-api-key": "PARTNER_KEY"  # Partner Key
             },
             json={
                 "prime": prime,
-                "partner_key": "partner_yqxLmBXWI59FWU44tusUMcv0FW5YPsFQw3dRaTVvGmkT9FWmBSNFuXwP",  # Partner Key
+                "partner_key": "PARTNER_KEY",  # Partner Key
                 "merchant_id": "yiyan777_CTBC",       # merchant ID
                 "details": "台北一日遊行程預訂",
                 "amount": price,
