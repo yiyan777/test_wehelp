@@ -618,11 +618,11 @@ async def create_order(request: Request):
             "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",
             headers={
                 "Content-Type": "application/json",
-                "x-api-key": "PARTNER_KEY"  # Partner Key
+                "x-api-key": PARTNER_KEY  # Partner Key
             },
             json={
                 "prime": prime,
-                "partner_key": "PARTNER_KEY",  # Partner Key
+                "partner_key": PARTNER_KEY,  # Partner Key
                 "merchant_id": "yiyan777_CTBC",       # merchant ID
                 "details": "台北一日遊行程預訂",
                 "amount": price,
