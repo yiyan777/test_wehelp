@@ -19,6 +19,7 @@ load_dotenv() # 這行會去讀 .env 檔案
 
 PARTNER_KEY = os.getenv("PARTNER_KEY")
 
+
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -39,7 +40,7 @@ async def thankyou(request: Request):
 
 DB_HOST = "localhost"
 DB_USER = "root"
-DB_PASSWORD = "123456"
+DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = "taipei_attractions"  # 要建立的資料庫名稱
 
 if False:
@@ -130,7 +131,7 @@ app.add_middleware(
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
-    "password": "123456",
+    "password": DB_PASSWORD,
     "database": "taipei_attractions"
 }
 
