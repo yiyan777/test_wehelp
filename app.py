@@ -39,7 +39,7 @@ async def thankyou(request: Request):
 
 
 DB_HOST = "localhost"
-DB_USER = "root"
+DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = "taipei_attractions"  # 要建立的資料庫名稱
 
@@ -130,7 +130,7 @@ app.add_middleware(
 # MySQL 連線設定
 DB_CONFIG = {
     "host": "localhost",
-    "user": "root",
+    "user": DB_USER,
     "password": DB_PASSWORD,
     "database": "taipei_attractions"
 }
@@ -342,8 +342,8 @@ async def register_user(request: Request):
 # 前端在請求此 API 時，須在 Authorization header 中帶入 Bearer Token
 
 # JWT 設定
-SECRET_KEY = "MY_SECRET_KEY" 
-ALGORITHM = "HS256"
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 TOKEN_EXPIRE_HOURS = 2
 
 @app.get("/api/user/auth")
