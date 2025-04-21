@@ -3,9 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You</title>
+  <title>訂單完成</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles/thankyou.css">
 </head>
 <body>
-  
+  <nav>
+    <div class="nav-title">
+      <a href="/">
+        <div class="taipei-1day">台北一日遊</div>
+      </a>
+      <div class="func-for-user">
+          <div class="booking" id="booking">預定行程</div>
+          <div id="login-trigger">登入/註冊</div>
+      </div>
+    </div>
+  </nav> 
+
+  <main>
+    <div class="thankyou-container">
+      <h2 id="success-text"></h2>
+      <p id="order-number"></p>
+      <hr>
+      <div id="order-info"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>COPYRIGHT © 2025 台北一日遊</div>
+  </footer>
+
+  <script src="/static/js/thankyou.js"></script>  
 </body>
 </html>

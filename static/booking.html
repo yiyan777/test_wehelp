@@ -59,19 +59,24 @@
 
       <hr>
 
+      <h3>信用卡付款資訊</h3>
       <div class="user-payment-info">
-        <h3>信用卡付款資訊</h3>
-        <label for="user-credit-card">卡片號碼：</label>
-        <input type="text" id="user-credit-card" placeholder="**** **** **** ****" pattern="\d{16}" maxlength="16" required>
-        <br>
-        <label for="user-credit-card-exp">過期時間：</label>
-        <input type="text" id="user-credit-card-exp" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/\d{2}" maxlength="5" required>
-        <br>
-        <label for="user-credit-card-security">驗證密碼：</label>
-        <input type="text" id="user-credit-card-security" placeholder="CVV" maxlength="3" pattern="\d{3}" required>
-        <br>
+        <label for="card-number">卡片號碼：</label> 
+        <div id="card-number" class="tpfield"></div>
       </div>
       
+      <br>
+      <div class="user-payment-info">
+        <label for="card-expiration-date">過期時間：</label>
+        <div id="card-expiration-date" class="tpfield"></div> 
+      </div>
+
+      <br>
+      <div class="user-payment-info">
+        <label for="card-ccv">驗證密碼：</label>
+        <div id="card-ccv" class="tpfield"></div>
+      </div>
+      <br>
       <hr>
 
       <div class="show-fee-confirm">
@@ -89,6 +94,7 @@
   <footer class="footer">
     <div>COPYRIGHT © 2025 台北一日遊</div>
   </footer>
+  <script src="https://js.tappaysdk.com/tpdirect/v5.13.1"></script>
   <script src="/static/js/booking.js"></script>
 </body>
 </html>
