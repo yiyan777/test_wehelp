@@ -1,6 +1,7 @@
 let currentPage = 0;
 let nextPage = 1;
 let isLoading = false;
+const loadingSpinner = document.getElementById("loading-spinner");
 
 async function getMrtList() {
     let response = await fetch("/api/mrts");
@@ -175,7 +176,7 @@ showLogin.addEventListener("click", () => {
 const signupBtn = document.getElementById("signup-btn");
 const signupMsg = document.getElementById("signup-msg");
 
-signupBtn.addEventListener("click", async () => {
+signupBtn.addEventListener("click", async (e) => {
     // 取得使用者輸入
     const name = document.getElementById("signup-name").value.trim();
     const email = document.getElementById("signup-email").value.trim();
@@ -187,6 +188,19 @@ signupBtn.addEventListener("click", async () => {
         signupMsg.style.color = "red";
         signupMsg.style.display = "block";
         return;
+    }
+
+    if (password.includes(" ")){
+        e.preventDefault(); //阻止送出表單
+        alert("密碼不可包含空格");
+        return
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)){
+        e.preventDefault(); //阻止送出表單
+        alert("請輸入正確的電子信箱格式");
+        return
     }
 
     try {
@@ -354,7 +368,10 @@ bookingTrigger.addEventListener("click", async () => {
 
         if (response.ok && result.data) {
             // token 有效 → 導向 booking 頁面
-            window.location.href = "/booking";
+            setTimeout(()=>{
+                window.location.href = "/booking";
+            }, 600);
+            
         } else {
             // token 無效 → 顯示登入 popup
             popupOverlay.style.display = "flex";

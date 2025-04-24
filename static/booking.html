@@ -21,19 +21,19 @@
   </nav>
 
   <main>
-    <h3 class="booking-title">您好，儼哥，待預訂的行程如下：</h3>
-    <div class="all-info">
+    <h3 class="booking-title"></h3>
+    <div class="all-info" style="display: none;">
       <div class="booking-detail" id="booking-detail">
         <!-- JS動態插入內容 -->
         <div class="container-img-booking-outline">
           <div class="attraction-img"> </div>
           <div class="booking-outline">
-            <div class="taipei-1day-spot">台北一日遊：平安鐘</div>
+            <div class="taipei-1day-spot"></div>
             <br>
-            <div class="date"><span>日期：</span>2025-04-30</div>
-            <div class="time"><span>時間：</span>早上9點到下午4點</div>
-            <div class="fee"><span>費用：</span>新台幣2000元</div>
-            <div class="location"><span>地點：</span>臺北市 大安區忠孝東路4段</div>
+            <div class="date"><span></span> </div>
+            <div class="time"><span></span> </div>
+            <div class="fee"><span></span> </div>
+            <div class="location"><span></span> </div>
           </div>
         </div>
         <div class="trash-can" id="trash-can">
@@ -91,9 +91,14 @@
     </div>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" style="display: none;">
     <div>COPYRIGHT © 2025 台北一日遊</div>
   </footer>
+
+  <div id="loading-spinner" class="loading-overlay" style="display: none;">
+    <div class="spinner"></div>
+  </div>
+  
   <script src="https://js.tappaysdk.com/tpdirect/v5.13.1"></script>
   <script src="/static/js/booking.js"></script>
 </body>
