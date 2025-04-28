@@ -281,6 +281,11 @@ loginBtn.addEventListener("click", async () => {
 
 // 登入狀態判斷
 window.addEventListener("DOMContentLoaded", async () => {
+    // 不能選取今天以前的日子 
+    const dateInput = document.getElementById("date");
+    const today = new Date().toISOString().split("T")[0]; //取得YYYY-MM-DD格式的今天
+    dateInput.min = today;
+    
     const loginTrigger = document.getElementById("login-trigger");
     const token = localStorage.getItem("token");
 

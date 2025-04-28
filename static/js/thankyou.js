@@ -2,14 +2,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loginTrigger = document.getElementById("login-trigger");
     const showBooking = document.getElementById("booking");
     const token = localStorage.getItem("token");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    const footer = document.querySelector(".footer");
+
+    loadingSpinner.style.display = "flex";
+
     if (token) {
         loginTrigger.textContent = "登出系統";
         loginTrigger.addEventListener("click", () => {
             localStorage.removeItem("token");
             window.location.href = "/";
+            footer.style.display = "flex";
         });
     } else {
         loginTrigger.textContent = "登入/註冊";
+        footer.style.display = "flex";
         loginTrigger.addEventListener("click", () => {
             window.location.href = "/";
         });
@@ -19,10 +26,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "/booking";
     });
 
+    loadingSpinner.style.display = "flex";
     // 未登入者擋住不給查詢訂單
     if (!token) {
       alert("請先登入系統");
       window.location.href = "/";
+      
       return;
     }
   
@@ -30,6 +39,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const orderNumber = urlParams.get("number");
     if (!orderNumber) {
       document.getElementById("order-info").innerHTML = "<p>無效的訂單編號</p>";
+      loadingSpinner.style.display = "none";
+      footer.style.display = "flex";
       return;
     }
   
@@ -44,15 +55,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       if (result.data === null) {
         document.getElementById("order-info").innerHTML = "<p>找不到訂單資訊</p>";
+        loadingSpinner.style.display = "none";
+        footer.style.display = "flex";
         return;
       }
       
+      const thankYouContainer = document.querySelector(".thankyou-container");
+      thankYouContainer.classList.add("show");
+
       document.getElementById("success-text").textContent = "行程預訂成功";
 
       const data = result.data;
       document.getElementById("order-number").textContent = `您的訂單編號：${data.number}`;
       
       const orderInfo = document.getElementById("order-info");
+
       orderInfo.innerHTML = ""; //清空
       const p1 = document.createElement("p");
       p1.textContent = `付款狀態：${data.status === 1 ? "付款成功" : "付款失敗"}`;
@@ -93,6 +110,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error("取得訂單失敗", error);
       document.getElementById("order-info").innerHTML = "<p>系統錯誤，請稍後再試</p>";
+    } finally {
+      loadingSpinner.style.display = "none";
+      footer.style.display = "flex";
     }
 });
   

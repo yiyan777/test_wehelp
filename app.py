@@ -2,6 +2,7 @@ import requests
 from fastapi.responses import FileResponse
 import json
 import mysql.connector
+import mysql.connector.pooling      # 使用連線池
 from fastapi import FastAPI, Query, Path, Request, HTTPException
 from fastapi.responses import JSONResponse
 from collections import Counter
@@ -39,7 +40,7 @@ async def thankyou(request: Request):
 
 
 DB_HOST = "localhost"
-DB_USER = "root"
+DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = "taipei_attractions"  # 要建立的資料庫名稱
 
@@ -127,16 +128,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# MySQL 連線設定
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": DB_PASSWORD,
-    "database": "taipei_attractions"
-}
+# MySQL 連線設定 (改用連線池)
+# DB_CONFIG = {
+#     "host": "localhost",
+#     "user": DB_USER,
+#     "password": DB_PASSWORD,
+#     "database": "taipei_attractions"
+# }
+
+# def get_db_connection():
+#     return mysql.connector.connect(**DB_CONFIG)
+
+
+# 使用連線池
+DB_POOL = mysql.connector.pooling.MySQLConnectionPool(
+    pool_name="taipei_pool",
+    pool_size=5,
+    pool_reset_session=True,
+    host=DB_HOST,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    database=DB_NAME
+)
 
 def get_db_connection():
-    return mysql.connector.connect(**DB_CONFIG)
+    return DB_POOL.get_connection()
+
 
 @app.get("/api/attractions")
 async def get_attractions(
@@ -342,8 +359,8 @@ async def register_user(request: Request):
 # 前端在請求此 API 時，須在 Authorization header 中帶入 Bearer Token
 
 # JWT 設定
-SECRET_KEY = "MY_SECRET_KEY" 
-ALGORITHM = "HS256"
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 TOKEN_EXPIRE_HOURS = 2
 
 @app.get("/api/user/auth")

@@ -48,9 +48,9 @@
             <!-- 讓使用者註冊的表單 -->
             <div class="popup-signup" style="display: none;">
                 <h3>註冊會員帳號</h3>
-                <input type="text" placeholder="輸入姓名" id="signup-name">
-                <input type="email" placeholder="輸入電子郵件" id="signup-email">
-                <input type="password" placeholder="輸入密碼" id="signup-password">
+                <input type="text" placeholder="輸入姓名" id="signup-name" required>
+                <input type="email" placeholder="輸入電子郵件" id="signup-email" required>
+                <input type="password" placeholder="輸入密碼" id="signup-password" pattern="^\S+$" required>
                 <button id="signup-btn">註冊新帳戶</button>
                 <p class="popup-msg" id="signup-msg" style="display: none;"></p>
                 <p class="switch-form">已經有帳戶了？<span id="show-login">點此登入</span></p>
@@ -81,6 +81,10 @@
     <footer>
         <div>COPYRIGHT © 2025 台北一日遊</div>
     </footer>
+
+    <div id="loading-spinner" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
 
     <script src="/static/js/index.js"></script>
 </body>
